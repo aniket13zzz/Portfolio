@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aniket Das — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f0; --ink: #1a1916; --muted: #8a8780;
+    --accent: #c8463a; --card: #ffffff; --border: #e2dfd9;
+    --mono: 'DM Mono', monospace; --serif: 'Fraunces', serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: 14px; line-height: 1.7; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 3rem;
+    background: rgba(247,245,240,0.93); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+
+  #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 3rem 4rem; max-width: 960px; margin: 0 auto; position: relative; }
+  .hero-tag { display: inline-block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards; }
+  .hero-name { font-family: var(--serif); font-size: clamp(3.2rem, 9vw, 6.2rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.04em; margin-bottom: 0.15em; opacity: 0; animation: fadeUp 0.7s 0.2s ease forwards; }
+  .hero-name .light { font-weight: 300; font-style: italic; color: var(--muted); }
+  .hero-sub { font-size: 14px; color: var(--muted); max-width: 520px; line-height: 1.9; margin-bottom: 2.8rem; opacity: 0; animation: fadeUp 0.7s 0.38s ease forwards; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 0.52s ease forwards; }
+  .btn { padding: 0.7rem 1.8rem; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border: 1px solid; transition: all 0.22s; cursor: pointer; display: inline-block; }
+  .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .hero-scroll { position: absolute; bottom: 2.5rem; left: 3rem; display: flex; align-items: center; gap: 0.8rem; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: fadeUp 0.7s 1s ease forwards; }
+  .line { width: 44px; height: 1px; background: var(--border); overflow: hidden; position: relative; }
+  .line::after { content: ''; position: absolute; left: -100%; top: 0; width: 100%; height: 100%; background: var(--accent); animation: scanLine 2.5s 1.2s ease-in-out infinite; }
+
+  .section { padding: 6rem 3rem; max-width: 960px; margin: 0 auto; }
+  .section-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+  .section-label::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--accent); }
+  .section-title { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 600; letter-spacing: -0.03em; margin-bottom: 3rem; line-height: 1.15; }
+  .section-title em { font-style: italic; font-weight: 300; color: var(--muted); }
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text p { color: #444; line-height: 1.9; margin-bottom: 1.2rem; }
+  .about-meta { display: flex; flex-direction: column; gap: 1.4rem; }
+  .meta-item { display: flex; flex-direction: column; gap: 0.25rem; }
+  .meta-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 13px; color: var(--ink); }
+  .edu-card { border: 1px solid var(--border); padding: 1.2rem 1.4rem; background: var(--card); }
+  .edu-degree { font-family: var(--serif); font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .edu-school { font-size: 13px; color: var(--muted); }
+  .edu-detail { font-size: 12px; color: var(--accent); margin-top: 0.4rem; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+  .skill-card { background: var(--card); border: 1px solid var(--border); padding: 1.4rem 1.6rem; transition: border-color 0.2s, transform 0.2s; }
+  .skill-card:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .skill-card-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag { background: var(--bg); border: 1px solid var(--border); padding: 0.2rem 0.6rem; font-size: 11px; color: var(--ink); }
+
+  .projects-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .project-card { background: var(--card); border: 1px solid var(--border); padding: 2.4rem; transition: border-color 0.2s; }
+  .project-card:hover { border-color: var(--ink); }
+  .project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.8rem; }
+  .project-badge { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.2rem 0.7rem; white-space: nowrap; }
+  .project-name { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  .project-tagline { color: var(--muted); font-style: italic; margin-bottom: 1.2rem; font-size: 13px; }
+  .project-desc { color: #444; line-height: 1.9; margin-bottom: 1.4rem; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.6rem; }
+  .stack-tag { background: var(--ink); color: var(--bg); padding: 0.22rem 0.7rem; font-size: 11px; }
+  .highlights h4 { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.7rem; }
+  .highlights ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+  .highlights ul li { display: flex; gap: 0.8rem; color: #444; font-size: 13px; }
+  .highlights ul li::before { content: '->'; color: var(--accent); flex-shrink: 0; }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-intro { font-size: 14px; color: #444; line-height: 1.9; }
+  .contact-links { display: flex; flex-direction: column; gap: 0.9rem; }
+  .contact-link { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border: 1px solid var(--border); text-decoration: none; color: var(--ink); transition: border-color 0.2s, background 0.2s; }
+  .contact-link:hover { border-color: var(--ink); background: var(--card); }
+  .contact-link-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .contact-link-value { font-size: 13px; color: var(--ink); }
+
+  footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto; color: var(--muted); font-size: 11px; letter-spacing: 0.06em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scanLine { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.12s; }
+  .reveal-d2 { transition-delay: 0.24s; }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .section { padding: 4rem 1.5rem; }
+    #hero { padding: 7rem 1.5rem 4rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .project-card { padding: 1.6rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#hero">Aniket<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <span class="hero-tag">B.Tech Student &nbsp;·&nbsp; Software Developer &nbsp;·&nbsp; AI/ML Enthusiast</span>
+  <h1 class="hero-name">Aniket <span class="light">Das.</span></h1>
+  <p class="hero-sub">
+    Building intelligent, intuitive applications — from hackathon platforms to AI-driven insurance systems.
+    I work across the full stack and love turning complex problems into clean, working products.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#projects">View Projects</a>
+    <a class="btn btn-ghost" href="#contact">Get in Touch</a>
+  </div>
+  <div class="hero-scroll"><div class="line"></div> Scroll to explore</div>
+</section>
+
+<hr class="divider"/>
+
+<section id="about" class="section">
+  <div class="section-label">About</div>
+  <h2 class="section-title">Who I <em>am</em></h2>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>
+        I'm a second-year B.Tech student at Techno International Newtown, Kolkata, specialising in
+        Computer Science and Business Systems. I'm deeply interested in technology, AI, and building
+        digital products that make a real difference.
+      </p>
+      <p>
+        I enjoy working across the stack — designing interfaces, wiring up backends, training ML models,
+        and integrating AI into real-world applications. I've competed at Smart India Hackathon 2025 and
+        Guidewire DEVTrails 2026, shipping complete products under pressure.
+      </p>
+      <p>
+        Currently seeking internship opportunities where I can apply my skills, learn from experienced
+        engineers, and contribute to meaningful projects.
+      </p>
+    </div>
+    <div class="about-meta">
+      <div class="edu-card">
+        <div class="edu-degree">B.Tech — CS &amp; Business Systems</div>
+        <div class="edu-school">Techno International Newtown</div>
+        <div class="edu-detail">2023 – 2027 &nbsp;·&nbsp; SGPA 8.00</div>
+      </div>
+      <div class="meta-item" style="margin-top:0.2rem">
+        <span class="meta-label">Focus Areas</span>
+        <span class="meta-value">Frontend · Machine Learning · UI/UX · Prompt Engineering</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Languages Spoken</span>
+        <span class="meta-value">English · Hindi · Bengali</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Location</span>
+        <span class="meta-value">Kolkata, India</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Status</span>
+        <span class="meta-value">Actively seeking internships</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<section id="skills" class="section">
+  <div class="section-label">Skills</div>
+  <h2 class="section-title">What I <em>work with</em></h2>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-card-title">Languages</div>
+      <div class="skill-tags">
+        <span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span>
+        <span class="tag">JavaScript</span><span class="tag">Java</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">Frontend</div>
+      <div class="skill-tags">
+        <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+        <span class="tag">Chart.js</span><span class="tag">Responsive Design</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">Backend &amp; APIs</div>
+      <div class="skill-tags">
+        <span class="tag">Node.js</span><span class="tag">Express.js</span>
+        <span class="tag">FastAPI</span><span class="tag">Spring Boot</span>
+        <span class="tag">REST APIs</span><span class="tag">WebSockets</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">AI &amp; ML</div>
+      <div class="skill-tags">
+        <span class="tag">Machine Learning</span><span class="tag">XGBoost</span>
+        <span class="tag">Prompt Engineering</span><span class="tag">AI Integration</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">Databases</div>
+      <div class="skill-tags">
+        <span class="tag">MongoDB</span><span class="tag">PostgreSQL</span>
+        <span class="tag">SQL</span><span class="tag">Firebase</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">Design &amp; Tools</div>
+      <div class="skill-tags">
+        <span class="tag">UI/UX Design</span><span class="tag">Git</span>
+        <span class="tag">Docker</span><span class="tag">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<section id="projects" class="section">
+  <div class="section-label">Projects</div>
+  <h2 class="section-title">Things I've <em>built</em></h2>
+  <div class="projects-list">
+
+    <div class="project-card reveal">
+      <div class="project-top"><span class="project-badge">Featured · PS5 Gen-AI Platform</span></div>
+      <div class="project-name">ComplaintAI</div>
+      <div class="project-tagline">Unified Customer Complaint Communication Dashboard</div>
+      <p class="project-desc">
+        A production-grade Gen-AI powered enterprise platform for large organizations receiving thousands of complaints
+        daily across multiple channels. Aggregates everything into one intelligent platform with automated classification,
+        deduplication, SLA tracking, and regulatory reporting.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Python FastAPI</span><span class="stack-tag">React TypeScript</span>
+        <span class="stack-tag">GPT-4o</span><span class="stack-tag">Claude</span>
+        <span class="stack-tag">PostgreSQL</span><span class="stack-tag">Kafka</span>
+        <span class="stack-tag">Elasticsearch</span><span class="stack-tag">Docker</span>
+        <span class="stack-tag">Redis</span><span class="stack-tag">sentence-transformers</span>
+      </div>
+      <div class="highlights">
+        <h4>Key Highlights</h4>
+        <ul>
+          <li>Omni-channel ingestion via REST webhooks and Kafka — Email, Chat, Social, IVR, Web, Mobile, CRM</li>
+          <li>LLM-powered complaint classification by type, product, severity, and sentiment</li>
+          <li>Semantic vector deduplication detecting duplicate complaints across channels</li>
+          <li>One-click AI draft responses — auto-generated professional replies for agent review</li>
+          <li>Automated regulatory reports in RBI, SEBI, and TRAI formats with CSV export</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-d1">
+      <div class="project-top"><span class="project-badge">Guidewire DEVTrails 2026</span></div>
+      <div class="project-name">GigShield</div>
+      <div class="project-tagline">AI-Powered Parametric Micro-Insurance for Gig Workers</div>
+      <p class="project-desc">
+        An AI-driven micro-insurance platform protecting food delivery partners from income loss due to weather
+        and civic disruptions. Parametric logic triggers automatic payouts when environmental thresholds are crossed,
+        with ML-based earnings prediction for fair payout calculation.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">Java Spring Boot</span><span class="stack-tag">Python FastAPI</span>
+        <span class="stack-tag">XGBoost</span><span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">WebSockets</span><span class="stack-tag">HTML/CSS/JS</span>
+        <span class="stack-tag">OpenWeatherMap API</span>
+      </div>
+      <div class="highlights">
+        <h4>Key Highlights</h4>
+        <ul>
+          <li>Parametric insurance logic with automatic payouts for rain, heatwaves, and pollution events</li>
+          <li>XGBoost earnings prediction model to calculate fair, personalised weekly payout amounts</li>
+          <li>GPS activity fraud detection to validate worker shifts and prevent false claims</li>
+          <li>Real-time worker dashboard with automated transfers and live disruption alerts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-d2">
+      <div class="project-top"><span class="project-badge">Smart India Hackathon 2025</span></div>
+      <div class="project-name">Health Buddy</div>
+      <div class="project-tagline">Community-Powered Disease Awareness &amp; Outbreak Tracking</div>
+      <p class="project-desc">
+        A web platform for tracking and reporting disease outbreaks using official health data combined with
+        crowdsourced community reports — with real-time visualisations and trend dashboards for public awareness.
+      </p>
+      <div class="project-stack">
+        <span class="stack-tag">HTML/CSS/JS</span><span class="stack-tag">Node.js</span>
+        <span class="stack-tag">Express.js</span><span class="stack-tag">MongoDB</span>
+        <span class="stack-tag">Firebase</span><span class="stack-tag">Chart.js</span>
+      </div>
+      <div class="highlights">
+        <h4>Key Highlights</h4>
+        <ul>
+          <li>Responsive frontend dashboards with disease info cards for multiple outbreak categories</li>
+          <li>REST APIs built with Node.js and Express to manage outbreak reports and data flow</li>
+          <li>MongoDB system for storing and organising structured health data</li>
+          <li>Crowdsourced reporting feature enabling real-time community disease awareness</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<section id="contact" class="section">
+  <div class="section-label">Contact</div>
+  <h2 class="section-title">Let's <em>connect</em></h2>
+  <div class="contact-grid reveal">
+    <div class="contact-intro">
+      <p>
+        I'm actively looking for internship opportunities in software development, AI/ML,
+        or product engineering. If you're building something interesting or want to collaborate,
+        I'd love to hear from you.
+      </p>
+      <br/>
+      <p style="color: var(--muted); font-size: 13px;">Based in Kolkata, India &nbsp;·&nbsp; Available for remote &amp; on-site roles</p>
+    </div>
+    <div class="contact-links">
+      <a class="contact-link" href="tel:+916291924008">
+        <div><div class="contact-link-label">Phone</div><div class="contact-link-value">+91 6291924008</div></div>
+      </a>
+      <a class="contact-link" href="mailto:rijudas.aniket@gmail.com">
+        <div><div class="contact-link-label">Email</div><div class="contact-link-value">rijudas.aniket@gmail.com</div></div>
+      </a>
+      <a class="contact-link" href="https://github.com/" target="_blank">
+        <div><div class="contact-link-label">GitHub</div><div class="contact-link-value">Add your GitHub link</div></div>
+      </a>
+      <a class="contact-link" href="https://linkedin.com/" target="_blank">
+        <div><div class="contact-link-label">LinkedIn</div><div class="contact-link-value">Add your LinkedIn link</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<footer>
+  <span>Aniket Das · 2025</span>
+  <span>B.Tech CS · Kolkata</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--ink)' : ''; });
+  });
+</script>
+</body>
+</html>
